@@ -60,6 +60,43 @@ class HelloViewSet(viewsets.ViewSet):
     Test API Viewsets:
     Their names are not traditional HTTP API names, more CRUD
     '''
+    serializer_class = serializers.HelloSerializer
+    #this assigns the serializer to our ViewSet
+
+    def create(self, request):   ##same as HTTP post in APIView
+        '''
+        create a new hello message w our name
+        '''
+        serializer = serializers.HelloSerializer(data=request.data)
+
+        if serializer.is_valid():
+            name = serializer.data.get('name')
+            message = 'Hello {0}'.format(name)
+            return Response({'message': message})
+        else:
+            return Response(
+                serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def retrieve(self, request, pk=None):
+        """Handles getting an object by its ID."""
+
+        return Response({'http_method': 'GET'})
+
+    def update(self, request, pk=None):    #essentially a put in APIView
+        """Handles updating an object."""
+
+        return Response({'http_method': 'PUT'})
+
+    def partial_update(self, request, pk=None): #this is same as HTTP Patch
+        """Handles updating part of an object."""
+
+        return Response({'http_method': 'PATCH'})
+
+    def destroy(self, request, pk=None):
+        '''removes obj'''
+        return Response({'http_method': 'DELETE'})
+
+
     def list(self, request):
         '''
         returns a hello message
