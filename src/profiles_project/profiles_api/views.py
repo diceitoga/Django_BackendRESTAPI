@@ -1,15 +1,17 @@
 from django.shortcuts import render
-from rest_framework import viewsets   ##viewsets here to work w DB
-from rest_framework.views import APIView ##APIView to work with Frontend
+
+from rest_framework import viewsets
+from rest_framework.views import APIView
 from rest_framework.response import Response
-from . import serializers
 from rest_framework import status
+
+from . import serializers
+from . import models
 
 # Create your views here.
 
 class HelloApiView(APIView):
     """Test API View."""
-
 
     serializer_class = serializers.HelloSerializer
 
@@ -32,41 +34,47 @@ class HelloApiView(APIView):
 
         if serializer.is_valid():
             name = serializer.data.get('name')
-            message = 'Hello {0}!'.format(name)
+            message = 'Hello {0}'.format(name)
             return Response({'message': message})
         else:
             return Response(
                 serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def put(self, request, pk=None):
-        '''
-        handle updating objects
-        pk stands for primary key in DB
-        '''
-        return Response({"method":"put"})
+        """Handles updating an object."""
+
+        return Response({'method': 'put'})
+
     def patch(self, request, pk=None):
-        '''
-        patch partially updates an objects
-        only updates certain fields that are required within the request
-        '''
-        return Response({"method":"patch"})
+        """Patch request, only updates fields provided in the request."""
+
+        return Response({'method': 'patch'})
+
     def delete(self, request, pk=None):
+        """Deletes and object."""
 
-        return Response({"method":"delete"})
+        return Response({'method': 'delete'})
 
-##############################################################
+
 class HelloViewSet(viewsets.ViewSet):
-    '''
-    Test API Viewsets:
-    Their names are not traditional HTTP API names, more CRUD
-    '''
-    serializer_class = serializers.HelloSerializer
-    #this assigns the serializer to our ViewSet
+    """Test API ViewSet."""
 
-    def create(self, request):   ##same as HTTP post in APIView
-        '''
-        create a new hello message w our name
-        '''
+    serializer_class = serializers.HelloSerializer
+
+    def list(self, request):
+        """Return a hello message."""
+
+        a_viewset = [
+            'Uses actions (list, create, retrieve, update, partial_update)',
+            'Automatically maps to URLs using Routers',
+            'Provides more functionality with less code.'
+        ]
+
+        return Response({'message': 'Hello!', 'a_viewset': a_viewset})
+
+    def create(self, request):
+        """Create a new hello message."""
+
         serializer = serializers.HelloSerializer(data=request.data)
 
         if serializer.is_valid():
@@ -82,29 +90,24 @@ class HelloViewSet(viewsets.ViewSet):
 
         return Response({'http_method': 'GET'})
 
-    def update(self, request, pk=None):    #essentially a put in APIView
+    def update(self, request, pk=None):
         """Handles updating an object."""
 
         return Response({'http_method': 'PUT'})
 
-    def partial_update(self, request, pk=None): #this is same as HTTP Patch
+    def partial_update(self, request, pk=None):
         """Handles updating part of an object."""
 
         return Response({'http_method': 'PATCH'})
 
     def destroy(self, request, pk=None):
-        '''removes obj'''
+        """Handles removing an object."""
+
         return Response({'http_method': 'DELETE'})
 
 
-    def list(self, request):
-        '''
-        returns a hello message
-        '''
-        a_viewset = [
-        'Uses actions (list, create, retrieve, update, partial_update)'
-        'Automatically maps to URLS using Routers',
-        'Provides more functionality with less code'
-        ]
+class UserProfileViewSet(viewsets.ModelViewSet):
+    """Handles creating, creating and updating profiles."""
 
-        return Response({'message': 'Hello!', 'a_viewset': a_viewset})
+    serializer_class = serializers.UserProfileSerializer
+    queryset = models.UserProfile.objects.all()
