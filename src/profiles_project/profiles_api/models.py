@@ -63,3 +63,21 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
         """Django uses this when it needs to convert the object to text."""
 
         return self.email
+
+class ProfileFeedItem(models.Model):
+    '''
+    profiles status update
+    models.ForeignKey is a built in function that ties THIS model to another models
+    as specificied...kind of like foreign key that ties different tables.
+    on_delete = models.CASCADE means if the user profie is deleted, delete all status
+    updates that were accompanied with it.
+    auto_now_add field is to set the time automatically to 'NOW' if not otherwise set.
+    '''
+    user_profile = models.ForeignKey('UserProfile', on_delete=models.CASCADE)
+    status_text = models.CharField(max_length=255)
+    created_on = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        """Return the model as a string."""
+
+        return self.status_text     #This is a CharField defined above in the model

@@ -4,6 +4,7 @@ from . import models
 
 # Register your models here.
 admin.site.register(models.UserProfile)
+admin.site.register(models.ProfileFeedItem)
 '''
 In the django.contrib, there is admin module that we importedself.
 In that module is a site module which has a prebuilt function called
