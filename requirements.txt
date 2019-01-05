@@ -5,3 +5,15 @@ packaging==16.8
 pyparsing==2.3.0
 pytz==2018.7
 six==1.12.0
+uWSGI ==2.0.15
+
+'''
+uWSGI is a software application that "aims at developing
+a full stack for building hosting services".[2]
+It is named after the Web Server Gateway Interface (WSGI),
+which was the first plugin supported by the project.[2]
+uWSGI is often used for serving Python web applications
+in conjunction with web servers
+such as Cherokee and Nginx,
+which offer direct support for uWSGI's native uwsgi protocol.[3]
+'''
